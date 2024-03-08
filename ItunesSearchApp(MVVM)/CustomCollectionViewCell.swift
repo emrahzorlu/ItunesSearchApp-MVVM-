@@ -8,7 +8,7 @@
 import UIKit
 
 class CustomCollectionViewCell: UICollectionViewCell {
-    // Özelleştirilebilir bileşenleriniz
+    
     private let imageView: UIImageView = UIImageView()
     private let titleLabel: UILabel = UILabel()
 
