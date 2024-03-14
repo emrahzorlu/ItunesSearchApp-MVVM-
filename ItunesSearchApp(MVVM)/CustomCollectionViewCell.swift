@@ -8,7 +8,7 @@
 import UIKit
 
 class CustomCollectionViewCell: UICollectionViewCell {
-    // Özelleştirilebilir bileşenleriniz
+
     private let imageView: UIImageView = UIImageView()
     private let titleLabel: UILabel = UILabel()
 
@@ -44,10 +44,25 @@ class CustomCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    func configure(with title: String, image: UIImage?) {
+    func configure(with result: SearchResult) {
+        titleLabel.text = result.trackName ?? ""
         
-        titleLabel.text = title
-        imageView.image = image
+        guard let urlString = result.artworkUrl100, let url = URL(string: urlString) else {
+            imageView.image = UIImage(named: "defaultImage")
+            return
+        }
+        
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.imageView.image = image
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.imageView.image = UIImage(named: "defaultImage")
+                }
+            }
+        }
     }
 }
 

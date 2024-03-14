@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController, UISearchBarDelegate {
     private let searchBar: UISearchBar = UISearchBar()
     private let segmentedControl: UISegmentedControl = UISegmentedControl(items: ["Movies", "Music", "Ebook", "Podcast"])
     private let collectionView: UICollectionView = {
@@ -18,11 +18,15 @@ final class SearchViewController: UIViewController {
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     private let cellIdentifier = "Cell"
-
+    private let viewModel = SearchViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
         configure()
+        searchBar.delegate = self
+        setupSegmentedControl()
+        segmentedControl.selectedSegmentIndex = 0
     }
 
     func setupCollectionView() {
@@ -60,14 +64,16 @@ final class SearchViewController: UIViewController {
 
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20 // Örnek olarak 20 hücre oluşturduk
+        return viewModel.numberOfResults()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? CustomCollectionViewCell else {
             fatalError("Cell could not be dequeued")
         }
-        cell.configure(with: "Item \(indexPath.item)", image: UIImage.fb)
+        if let result = viewModel.result(at: indexPath.item) {
+            cell.configure(with: result)
+        }
         return cell
     }
 
@@ -78,3 +84,48 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return CGSize(width: width, height: height)
     }
 }
+
+extension SearchViewController {
+    
+    func setupSegmentedControl() {
+            segmentedControl.addTarget(self, action: #selector(segmentValueChanged(_:)), for: .valueChanged)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        performSearch()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        performSearch()
+    }
+    
+    @objc func segmentValueChanged(_ sender: UISegmentedControl) {
+        performSearch()
+    }
+    
+    func performSearch() {
+        guard let query = searchBar.text, query.count >= 3 else {
+            return
+        }
+        let selectedSegmentIndex = segmentedControl.selectedSegmentIndex
+        let entity: String
+        switch selectedSegmentIndex {
+        case 0:
+            entity = "movie"
+        case 1:
+            entity = "music"
+        case 2:
+            entity = "ebook"
+        case 3:
+            entity = "podcast"
+        default:
+            entity = "movie"
+        }
+        viewModel.search(query: query, entity: entity) { [weak self] in
+            self?.collectionView.reloadData()
+        }
+    }
+}
+
+
+
