@@ -19,7 +19,8 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
     }()
     private let cellIdentifier = "Cell"
     private let viewModel = SearchViewModel()
-    
+    private var searchThrottle: Throttle?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
@@ -103,8 +104,11 @@ extension SearchViewController {
         performSearch()
     }
     
-    func performSearch() {
+    
+    @objc func performSearch() {
         guard let query = searchBar.text, query.count >= 3 else {
+            viewModel.clearResults()
+            collectionView.reloadData()
             return
         }
         let selectedSegmentIndex = segmentedControl.selectedSegmentIndex
@@ -121,8 +125,14 @@ extension SearchViewController {
         default:
             entity = "movie"
         }
-        viewModel.search(query: query, entity: entity) { [weak self] in
-            self?.collectionView.reloadData()
+        
+        searchThrottle?.cancel()
+        searchThrottle = Throttle(minimumDelay: 0.5)
+        searchThrottle?.throttle {
+            [weak self] in
+            self?.viewModel.search(query: query, entity: entity) { [weak self] in
+                self?.collectionView.reloadData()
+            }
         }
     }
 }

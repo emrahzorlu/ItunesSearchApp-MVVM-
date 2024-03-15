@@ -19,7 +19,6 @@ class SearchViewModel {
         networkingService.searchItunesAPI(withQuery: query, entity: entity) { [weak self] results in
             self?.searchResults = results
             completion()
-            print(results)
         }
     }
     
@@ -33,5 +32,9 @@ class SearchViewModel {
         }
         return searchResults[index]
     }
+    
+    func clearResults() {
+            searchResults = []
+        }
 }
 

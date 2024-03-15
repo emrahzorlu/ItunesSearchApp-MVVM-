@@ -18,6 +18,7 @@
 		B17649292B9A7F2800D01241 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B17649282B9A7F2800D01241 /* Assets.xcassets */; };
 		B176492C2B9A7F2800D01241 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = B176492B2B9A7F2800D01241 /* Base */; };
 		B17649342B9A820F00D01241 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17649332B9A820F00D01241 /* SearchViewController.swift */; };
+		B1BF1DF02BA3E2CE002C0532 /* Throttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1BF1DEF2BA3E2CE002C0532 /* Throttle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		B176492B2B9A7F2800D01241 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B176492D2B9A7F2800D01241 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B17649332B9A820F00D01241 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		B1BF1DEF2BA3E2CE002C0532 /* Throttle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				B15B3D6B2B9AC837002D708A /* FetchItunesApi.swift */,
 				B17649332B9A820F00D01241 /* SearchViewController.swift */,
 				B10C6DE42BA28A970011F1C7 /* SearchViewModel.swift */,
+				B1BF1DEF2BA3E2CE002C0532 /* Throttle.swift */,
 				B15B3D672B9AAF3C002D708A /* CustomCollectionViewCell.swift */,
 				B176491F2B9A7F2700D01241 /* AppDelegate.swift */,
 				B17649212B9A7F2700D01241 /* SceneDelegate.swift */,
@@ -164,6 +167,7 @@
 				B17649222B9A7F2700D01241 /* SceneDelegate.swift in Sources */,
 				B15B3D6A2B9AC803002D708A /* SearchModel.swift in Sources */,
 				B15B3D682B9AAF3C002D708A /* CustomCollectionViewCell.swift in Sources */,
+				B1BF1DF02BA3E2CE002C0532 /* Throttle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
