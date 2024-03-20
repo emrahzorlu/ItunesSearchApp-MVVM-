@@ -20,26 +20,24 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
     private let cellIdentifier = "Cell"
     private let viewModel = SearchViewModel()
     private var searchThrottle: Throttle?
+    private var offset = 0
+    private var limit = 20
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCollectionView()
         configure()
         searchBar.delegate = self
-        setupSegmentedControl()
         segmentedControl.selectedSegmentIndex = 0
     }
 
-    func setupCollectionView() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
-
-    }
 
     func configure(){
         view.backgroundColor = .systemBackground
         searchBar.placeholder = "Search..."
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        segmentedControl.addTarget(self, action: #selector(segmentValueChanged(_:)), for: .valueChanged)
         view.addSubview(searchBar)
         view.addSubview(segmentedControl)
         view.addSubview(collectionView)
@@ -84,33 +82,36 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         let height: CGFloat = 200
         return CGSize(width: width, height: height)
     }
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+           let lastItem = viewModel.numberOfResults() - 1
+           if indexPath.item == lastItem {
+               offset += limit 
+               performSearch()
+           }
+       }
 }
+
 
 extension SearchViewController {
     
-    func setupSegmentedControl() {
-            segmentedControl.addTarget(self, action: #selector(segmentValueChanged(_:)), for: .valueChanged)
-    }
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        performSearch()
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        offset = 0
         performSearch()
     }
     
     @objc func segmentValueChanged(_ sender: UISegmentedControl) {
+        offset = 0
         performSearch()
     }
     
     
-    @objc func performSearch() {
+    func performSearch() {
         guard let query = searchBar.text, query.count >= 3 else {
             viewModel.clearResults()
             collectionView.reloadData()
             return
         }
+        
         let selectedSegmentIndex = segmentedControl.selectedSegmentIndex
         let entity: String
         switch selectedSegmentIndex {
@@ -130,12 +131,12 @@ extension SearchViewController {
         searchThrottle = Throttle(minimumDelay: 0.5)
         searchThrottle?.throttle {
             [weak self] in
-            self?.viewModel.search(query: query, entity: entity) { [weak self] in
+            if self?.offset == 0 {
+                 self?.viewModel.clearResults()
+             }
+            self?.viewModel.search(query: query, entity: entity,offset: self!.offset, limit: self!.limit) { [weak self] in
                 self?.collectionView.reloadData()
             }
         }
     }
 }
-
-
-

@@ -19,7 +19,6 @@ class Throttle {
     }
     
     func throttle(_ block: @escaping () -> Void) {
-        workItem.cancel()
         
         workItem = DispatchWorkItem() {
             [weak self] in

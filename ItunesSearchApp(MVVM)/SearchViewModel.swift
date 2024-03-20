@@ -15,9 +15,9 @@ class SearchViewModel {
         self.networkingService = networkingService
     }
     
-    func search(query: String, entity: String, completion: @escaping () -> Void) {
-        networkingService.searchItunesAPI(withQuery: query, entity: entity) { [weak self] results in
-            self?.searchResults = results
+    func search(query: String, entity: String, offset: Int, limit: Int, completion: @escaping () -> Void) {
+        networkingService.searchItunesAPI(withQuery: query, entity: entity, offset: offset, limit: limit) { [weak self] results in
+            self?.searchResults.append(contentsOf: results)
             completion()
         }
     }
@@ -37,4 +37,3 @@ class SearchViewModel {
             searchResults = []
         }
 }
-
