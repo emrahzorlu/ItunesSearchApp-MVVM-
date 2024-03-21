@@ -17,6 +17,12 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     private let cellIdentifier = "Cell"
     private let viewModel = SearchViewModel()
     private var searchThrottle: Throttle?
@@ -41,6 +47,8 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(searchBar)
         view.addSubview(segmentedControl)
         view.addSubview(collectionView)
+        view.addSubview(loadingIndicator)
+
         
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -57,6 +65,10 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(segmentedControl.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalToSuperview()
+        }
+        loadingIndicator.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
     }
 }
@@ -84,8 +96,8 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
            let lastItem = viewModel.numberOfResults() - 1
-           if indexPath.item == lastItem {
-               offset += limit 
+           if indexPath.item == lastItem && offset < lastItem {
+               offset += limit
                performSearch()
            }
        }
@@ -127,6 +139,12 @@ extension SearchViewController {
             entity = "movie"
         }
         
+        loadingIndicator.startAnimating()
+        if offset == 0 {
+            viewModel.clearResults()
+            collectionView.reloadData()
+        }
+    
         searchThrottle?.cancel()
         searchThrottle = Throttle(minimumDelay: 0.5)
         searchThrottle?.throttle {
@@ -135,6 +153,7 @@ extension SearchViewController {
                  self?.viewModel.clearResults()
              }
             self?.viewModel.search(query: query, entity: entity,offset: self!.offset, limit: self!.limit) { [weak self] in
+                self!.loadingIndicator.stopAnimating()
                 self?.collectionView.reloadData()
             }
         }
