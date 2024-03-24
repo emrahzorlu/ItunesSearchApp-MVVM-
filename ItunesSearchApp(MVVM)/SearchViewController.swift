@@ -13,7 +13,7 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
     private let segmentedControl: UISegmentedControl = UISegmentedControl(items: ["Movies", "Music", "Ebook", "Podcast"])
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 10 
+        layout.minimumInteritemSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
@@ -22,24 +22,20 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
         indicator.hidesWhenStopped = true
         return indicator
     }()
-    
+
     private let cellIdentifier = "Cell"
     private let viewModel = SearchViewModel()
-    private var searchThrottle: Throttle?
-    private var offset = 0
-    private var limit = 20
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
-        searchBar.delegate = self
-        segmentedControl.selectedSegmentIndex = 0
     }
 
-
-    func configure(){
+    func configure() {
         view.backgroundColor = .systemBackground
+        segmentedControl.selectedSegmentIndex = 0
         searchBar.placeholder = "Search..."
+        searchBar.delegate = self
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
@@ -49,7 +45,6 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(collectionView)
         view.addSubview(loadingIndicator)
 
-        
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview()
@@ -77,7 +72,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.numberOfResults()
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? CustomCollectionViewCell else {
             fatalError("Cell could not be dequeued")
@@ -88,74 +83,50 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return cell
     }
 
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.bounds.width - 30) / 2
         let height: CGFloat = 200
         return CGSize(width: width, height: height)
     }
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-           let lastItem = viewModel.numberOfResults() - 1
-           if indexPath.item == lastItem && offset < lastItem {
-               offset += limit
-               performSearch()
-           }
-       }
-}
 
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        viewModel.loadMoreResults(query: searchBar.text ?? "", entity: entityForSelectedSegment(), at: indexPath) { [weak self] in
+            self?.loadingIndicator.stopAnimating()
+            self?.collectionView.reloadData()
+        }
+    }
+}
 
 extension SearchViewController {
+
+    func performSearch() {
+        loadingIndicator.startAnimating()
+        viewModel.search(query: searchBar.text ?? "", entity: entityForSelectedSegment()) { [weak self] in
+            self?.loadingIndicator.stopAnimating()
+            self?.collectionView.reloadData()
+        }
+    }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        offset = 0
+        viewModel.clearResults()
+        collectionView.reloadData()
         performSearch()
     }
-    
+
     @objc func segmentValueChanged(_ sender: UISegmentedControl) {
-        offset = 0
+        viewModel.clearResults()
+        collectionView.reloadData()
         performSearch()
     }
-    
-    
-    func performSearch() {
-        guard let query = searchBar.text, query.count >= 3 else {
-            viewModel.clearResults()
-            collectionView.reloadData()
-            return
-        }
-        
-        let selectedSegmentIndex = segmentedControl.selectedSegmentIndex
-        let entity: String
-        switch selectedSegmentIndex {
-        case 0:
-            entity = "movie"
-        case 1:
-            entity = "music"
-        case 2:
-            entity = "ebook"
-        case 3:
-            entity = "podcast"
-        default:
-            entity = "movie"
-        }
-        
-        loadingIndicator.startAnimating()
-        if offset == 0 {
-            viewModel.clearResults()
-            collectionView.reloadData()
-        }
-    
-        searchThrottle?.cancel()
-        searchThrottle = Throttle(minimumDelay: 0.5)
-        searchThrottle?.throttle {
-            [weak self] in
-            if self?.offset == 0 {
-                 self?.viewModel.clearResults()
-             }
-            self?.viewModel.search(query: query, entity: entity,offset: self!.offset, limit: self!.limit) { [weak self] in
-                self!.loadingIndicator.stopAnimating()
-                self?.collectionView.reloadData()
-            }
+
+    func entityForSelectedSegment() -> String {
+        switch segmentedControl.selectedSegmentIndex {
+        case 0: return "movie"
+        case 1: return "music"
+        case 2: return "ebook"
+        case 3: return "podcast"
+        default: return "movie"
         }
     }
 }
+

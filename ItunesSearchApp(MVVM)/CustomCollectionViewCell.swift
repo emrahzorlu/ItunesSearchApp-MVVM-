@@ -23,11 +23,9 @@ class CustomCollectionViewCell: UICollectionViewCell {
 
     private func setupUI() {
         
-        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
         contentView.addSubview(imageView)
-        
         
         titleLabel.textAlignment = .center
         contentView.addSubview(titleLabel)
@@ -44,11 +42,10 @@ class CustomCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func updateImage(with imageURL: URL?) {
+    func loadImage(with imageURL: URL?) {
         
         guard let imageURL = imageURL else { return }
         
-           
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: imageURL), let image = UIImage(data: data) {
                 DispatchQueue.main.async {
@@ -67,8 +64,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
                imageView.image = UIImage(named: "defaultImage")
                return
            }
-           
-           updateImage(with: url)
+           loadImage(with: url)
        }
    }
 

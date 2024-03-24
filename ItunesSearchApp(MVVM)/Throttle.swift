@@ -34,4 +34,3 @@ class Throttle {
         workItem.cancel()
     }
 }
-
