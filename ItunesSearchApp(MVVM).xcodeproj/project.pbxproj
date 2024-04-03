@@ -13,6 +13,7 @@
 		B15B3D682B9AAF3C002D708A /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B3D672B9AAF3C002D708A /* CustomCollectionViewCell.swift */; };
 		B15B3D6A2B9AC803002D708A /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B3D692B9AC803002D708A /* SearchModel.swift */; };
 		B15B3D6C2B9AC837002D708A /* FetchItunesApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B3D6B2B9AC837002D708A /* FetchItunesApi.swift */; };
+		B16A7B762BBC3E2400D5EA4A /* BaseControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A7B752BBC3E2400D5EA4A /* BaseControllerProtocol.swift */; };
 		B17649202B9A7F2700D01241 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B176491F2B9A7F2700D01241 /* AppDelegate.swift */; };
 		B17649222B9A7F2700D01241 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17649212B9A7F2700D01241 /* SceneDelegate.swift */; };
 		B17649292B9A7F2800D01241 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B17649282B9A7F2800D01241 /* Assets.xcassets */; };
@@ -26,6 +27,7 @@
 		B15B3D672B9AAF3C002D708A /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		B15B3D692B9AC803002D708A /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		B15B3D6B2B9AC837002D708A /* FetchItunesApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchItunesApi.swift; sourceTree = "<group>"; };
+		B16A7B752BBC3E2400D5EA4A /* BaseControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseControllerProtocol.swift; sourceTree = "<group>"; };
 		B176491C2B9A7F2700D01241 /* ItunesSearchApp(MVVM).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ItunesSearchApp(MVVM).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B176491F2B9A7F2700D01241 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B17649212B9A7F2700D01241 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +51,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B16A7B772BBC3E5300D5EA4A /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				B16A7B752BBC3E2400D5EA4A /* BaseControllerProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		B16A7B802BBCFCCF00D5EA4A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B15B3D672B9AAF3C002D708A /* CustomCollectionViewCell.swift */,
+				B17649332B9A820F00D01241 /* SearchViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B16A7B812BBCFCD900D5EA4A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				B10C6DE42BA28A970011F1C7 /* SearchViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		B16A7B822BBCFCE500D5EA4A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B15B3D692B9AC803002D708A /* SearchModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B16A7B852BBCFD7A00D5EA4A /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				B15B3D6B2B9AC837002D708A /* FetchItunesApi.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		B16A7B862BBCFD8F00D5EA4A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				B1BF1DEF2BA3E2CE002C0532 /* Throttle.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		B17649132B9A7F2700D01241 = {
 			isa = PBXGroup;
 			children = (
@@ -68,12 +119,12 @@
 		B176491E2B9A7F2700D01241 /* ItunesSearchApp(MVVM) */ = {
 			isa = PBXGroup;
 			children = (
-				B15B3D692B9AC803002D708A /* SearchModel.swift */,
-				B15B3D6B2B9AC837002D708A /* FetchItunesApi.swift */,
-				B1BF1DEF2BA3E2CE002C0532 /* Throttle.swift */,
-				B10C6DE42BA28A970011F1C7 /* SearchViewModel.swift */,
-				B17649332B9A820F00D01241 /* SearchViewController.swift */,
-				B15B3D672B9AAF3C002D708A /* CustomCollectionViewCell.swift */,
+				B16A7B772BBC3E5300D5EA4A /* Protocol */,
+				B16A7B822BBCFCE500D5EA4A /* Model */,
+				B16A7B802BBCFCCF00D5EA4A /* View */,
+				B16A7B812BBCFCD900D5EA4A /* ViewModel */,
+				B16A7B852BBCFD7A00D5EA4A /* Network */,
+				B16A7B862BBCFD8F00D5EA4A /* Utils */,
 				B176491F2B9A7F2700D01241 /* AppDelegate.swift */,
 				B17649212B9A7F2700D01241 /* SceneDelegate.swift */,
 				B17649282B9A7F2800D01241 /* Assets.xcassets */,
@@ -165,6 +216,7 @@
 				B17649202B9A7F2700D01241 /* AppDelegate.swift in Sources */,
 				B15B3D6C2B9AC837002D708A /* FetchItunesApi.swift in Sources */,
 				B17649222B9A7F2700D01241 /* SceneDelegate.swift in Sources */,
+				B16A7B762BBC3E2400D5EA4A /* BaseControllerProtocol.swift in Sources */,
 				B15B3D6A2B9AC803002D708A /* SearchModel.swift in Sources */,
 				B15B3D682B9AAF3C002D708A /* CustomCollectionViewCell.swift in Sources */,
 				B1BF1DF02BA3E2CE002C0532 /* Throttle.swift in Sources */,

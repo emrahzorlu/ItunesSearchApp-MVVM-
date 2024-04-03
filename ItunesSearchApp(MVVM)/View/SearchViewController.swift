@@ -8,6 +8,13 @@
 import UIKit
 import SnapKit
 
+protocol MainDisplayLayer: BaseControllerProtocol {
+    func configure()
+    func startAnimating()
+    func stopAnimating()
+    func reloadCollectionView()
+}
+
 final class SearchViewController: UIViewController, UISearchBarDelegate {
     private let searchBar: UISearchBar = UISearchBar()
     private let segmentedControl: UISegmentedControl = UISegmentedControl(items: ["Movies", "Music", "Ebook", "Podcast"])
@@ -23,12 +30,24 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
         return indicator
     }()
 
-    private let cellIdentifier = "Cell"
-    private let viewModel = SearchViewModel()
+    var viewModel: MainBusinessLayer
 
+    init(viewModel: MainBusinessLayer) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        self.viewModel.view = self
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    private let cellIdentifier = "Cell"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        configure()
+        viewModel.viewDidLoad()
     }
 
     func configure() {
@@ -91,32 +110,34 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         viewModel.loadMoreResults(query: searchBar.text ?? "", entity: entityForSelectedSegment(), at: indexPath) { [weak self] in
-            self?.loadingIndicator.stopAnimating()
-            self?.collectionView.reloadData()
+            self?.viewModel.view?.stopAnimating()
+            self?.viewModel.view?.reloadCollectionView()
         }
     }
 }
 
-extension SearchViewController {
+extension SearchViewController: MainDisplayLayer {
 
-    func performSearch() {
+    func startAnimating() {
         loadingIndicator.startAnimating()
-        viewModel.search(query: searchBar.text ?? "", entity: entityForSelectedSegment()) { [weak self] in
-            self?.loadingIndicator.stopAnimating()
-            self?.collectionView.reloadData()
-        }
+    }
+    
+    func stopAnimating() {
+        loadingIndicator.stopAnimating()
+    }
+    
+    func reloadCollectionView() {
+        collectionView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.clearResults()
-        collectionView.reloadData()
-        performSearch()
+        viewModel.search(query: searchBar.text ?? "", entity: entityForSelectedSegment()) {}
     }
 
     @objc func segmentValueChanged(_ sender: UISegmentedControl) {
         viewModel.clearResults()
-        collectionView.reloadData()
-        performSearch()
+        viewModel.search(query: searchBar.text ?? "", entity: entityForSelectedSegment()) {}
     }
 
     func entityForSelectedSegment() -> String {
@@ -129,4 +150,3 @@ extension SearchViewController {
         }
     }
 }
-

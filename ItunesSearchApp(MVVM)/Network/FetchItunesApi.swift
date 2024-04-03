@@ -40,7 +40,6 @@ final class NetworkingApi: NetworkingService {
     }
 }
 
-
 fileprivate struct SearchResponse: Decodable {
     let results: [SearchResult]
 }

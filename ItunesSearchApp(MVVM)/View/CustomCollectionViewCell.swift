@@ -67,5 +67,3 @@ class CustomCollectionViewCell: UICollectionViewCell {
            loadImage(with: url)
        }
    }
-
-
