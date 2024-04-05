@@ -29,7 +29,6 @@ final class SearchViewModel: MainBusinessLayer {
     private var limit = 20
     private var searchThrottle: Throttle?
     
-    
     init(networkingService: NetworkingService = NetworkingApi()) {
         self.networkingService = networkingService
     }
@@ -72,12 +71,10 @@ final class SearchViewModel: MainBusinessLayer {
         }
     }
     
-    
     func numberOfResults() -> Int {
         return searchResults.count
     }
     
-
     func result(at index: Int) -> SearchResult? {
         guard index >= 0 && index < searchResults.count else {
             return nil

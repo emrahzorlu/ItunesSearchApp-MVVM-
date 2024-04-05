@@ -15,7 +15,7 @@ protocol MainDisplayLayer: BaseControllerProtocol {
     func reloadCollectionView()
 }
 
-final class SearchViewController: UIViewController, UISearchBarDelegate {
+final class SearchViewController: BaseViewController, UISearchBarDelegate {
     private let searchBar: UISearchBar = UISearchBar()
     private let segmentedControl: UISegmentedControl = UISegmentedControl(items: ["Movies", "Music", "Ebook", "Podcast"])
     private let collectionView: UICollectionView = {
@@ -24,24 +24,18 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
-    private let loadingIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
 
     var viewModel: MainBusinessLayer
 
     init(viewModel: MainBusinessLayer) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
+        super.init()
         self.viewModel.view = self
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     private let cellIdentifier = "Cell"
     
@@ -118,14 +112,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
 
 extension SearchViewController: MainDisplayLayer {
 
-    func startAnimating() {
-        loadingIndicator.startAnimating()
-    }
-    
-    func stopAnimating() {
-        loadingIndicator.stopAnimating()
-    }
-    
     func reloadCollectionView() {
         collectionView.reloadData()
     }
