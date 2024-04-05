@@ -24,7 +24,7 @@ final class SearchViewController: BaseViewController, UISearchBarDelegate {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
-
+    
     var viewModel: MainBusinessLayer
 
     init(viewModel: MainBusinessLayer) {
@@ -107,6 +107,15 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             self?.viewModel.view?.stopAnimating()
             self?.viewModel.view?.reloadCollectionView()
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let selectedResult = viewModel.result(at: indexPath.item) else {
+            return
+        }
+        let detailViewModel = DetailViewModel(searchResult: selectedResult)
+        let detailViewController = DetailViewController(viewModel: detailViewModel)
+        navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
 
