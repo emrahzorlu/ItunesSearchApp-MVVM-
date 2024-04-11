@@ -16,9 +16,7 @@ protocol MainBusinessLayer: BaseViewModelProtocol {
     func search(query: String, entity: String, completion: @escaping () -> Void)
     func loadMoreResults(query: String, entity: String, at indexPath: IndexPath, completion: @escaping () -> Void)
     func clearResults()
-
-}
-
+    }
 
 final class SearchViewModel: MainBusinessLayer {
 

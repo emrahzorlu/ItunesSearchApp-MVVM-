@@ -8,7 +8,7 @@
 import Foundation
 
 class Throttle {
-    private var workItem: DispatchWorkItem = DispatchWorkItem(block: {})//
+    private var workItem: DispatchWorkItem = DispatchWorkItem(block: {})
     private var previousRun: Date = Date.distantPast
     private let queue: DispatchQueue
     private let delay: TimeInterval

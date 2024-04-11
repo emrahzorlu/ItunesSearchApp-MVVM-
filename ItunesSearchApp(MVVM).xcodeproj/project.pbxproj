@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B10C6DE52BA28A970011F1C7 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10C6DE42BA28A970011F1C7 /* SearchViewModel.swift */; };
+		B14947AE2BC77027000A7A40 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14947AD2BC77027000A7A40 /* UIImageExtension.swift */; };
 		B15B3D642B9A84DE002D708A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B15B3D632B9A84DE002D708A /* SnapKit */; };
 		B15B3D662B9A84DE002D708A /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = B15B3D652B9A84DE002D708A /* SnapKit-Dynamic */; };
 		B15B3D682B9AAF3C002D708A /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B3D672B9AAF3C002D708A /* CustomCollectionViewCell.swift */; };
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		B10C6DE42BA28A970011F1C7 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		B14947AD2BC77027000A7A40 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		B15B3D672B9AAF3C002D708A /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		B15B3D692B9AC803002D708A /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		B15B3D6B2B9AC837002D708A /* FetchItunesApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchItunesApi.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				B16A7B812BBCFCD900D5EA4A /* ViewModel */,
 				B16A7B852BBCFD7A00D5EA4A /* Network */,
 				B16A7B862BBCFD8F00D5EA4A /* Utils */,
+				B1C4A3742BC8A1900043C8C8 /* Extension */,
 				B176491F2B9A7F2700D01241 /* AppDelegate.swift */,
 				B17649212B9A7F2700D01241 /* SceneDelegate.swift */,
 				B17649282B9A7F2800D01241 /* Assets.xcassets */,
@@ -155,6 +158,14 @@
 				B18F25D62BBF7B2800C824EE /* BaseViewController.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		B1C4A3742BC8A1900043C8C8 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				B14947AD2BC77027000A7A40 /* UIImageExtension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,6 +253,7 @@
 				B15B3D6C2B9AC837002D708A /* FetchItunesApi.swift in Sources */,
 				B17649222B9A7F2700D01241 /* SceneDelegate.swift in Sources */,
 				B18F25D72BBF7B2800C824EE /* BaseViewController.swift in Sources */,
+				B14947AE2BC77027000A7A40 /* UIImageExtension.swift in Sources */,
 				B16A7B762BBC3E2400D5EA4A /* BaseControllerProtocol.swift in Sources */,
 				B1B97E6E2BBF96EC0004371E /* DetailViewModel.swift in Sources */,
 				B15B3D6A2B9AC803002D708A /* SearchModel.swift in Sources */,
