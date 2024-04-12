@@ -58,7 +58,6 @@ final class DetailViewModel: DetailBusinessLayer {
         let humanReadableDateFormatter = DateFormatter()
         humanReadableDateFormatter.dateStyle = .long
         humanReadableDateFormatter.timeStyle = .none
-        
         return humanReadableDateFormatter.string(from: releaseDate)
     }
     

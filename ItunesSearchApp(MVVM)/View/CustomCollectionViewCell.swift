@@ -49,14 +49,27 @@ class CustomCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func configure(with result: SearchResult) {
+    func configure(with result: SearchResult, delegate: SearchViewController) {
         titleLabel.text = result.trackName
         imageView.image = nil
         activityIndicator.startAnimating()
-        
-        imageView.setImage(from: result.artworkUrl100) { [weak self] success in
-            if success {
+                
+        imageView.setImage(from: result.artworkUrl100) { [weak self] result in
+            switch result {
+            case .success:
                 self?.activityIndicator.stopAnimating()
+            case .failure(let error):
+                self?.activityIndicator.stopAnimating()
+                let errorMessage: String
+                switch error {
+                case .invalidURL:
+                    errorMessage = "Invalid URL."
+                case .failedToLoadData:
+                    errorMessage = "Failed to load data."
+                }
+                let alertController = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                delegate.present(alertController, animated: true, completion: nil)
             }
         }
     }

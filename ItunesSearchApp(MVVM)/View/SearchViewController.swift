@@ -13,6 +13,7 @@ protocol MainDisplayLayer: BaseControllerProtocol {
     func startAnimating()
     func stopAnimating()
     func reloadCollectionView()
+    func showErrorMessage(_ message: String)
 }
 
 final class SearchViewController: BaseViewController, UISearchBarDelegate {
@@ -91,7 +92,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             fatalError("Cell could not be dequeued")
         }
         if let result = viewModel.result(at: indexPath.item) {
-            cell.configure(with: result)
+            cell.configure(with: result, delegate: self)
         }
         return cell
     }
@@ -143,5 +144,14 @@ extension SearchViewController: MainDisplayLayer {
         case 3: return "podcast"
         default: return "movie"
         }
+    }
+}
+
+extension SearchViewController {
+    
+    func showErrorMessage(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }

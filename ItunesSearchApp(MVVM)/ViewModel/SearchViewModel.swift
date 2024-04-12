@@ -38,37 +38,58 @@ final class SearchViewModel: MainBusinessLayer {
     func search(query: String, entity: String, completion: @escaping () -> Void) {
         view?.reloadCollectionView()
         view?.startAnimating()
+        
         guard query.count >= 3 else {
             clearResults()
-            completion()
             view?.stopAnimating()
+            completion()
             return
         }
         
         searchThrottle?.cancel()
         searchThrottle = Throttle(minimumDelay: 0.5)
         searchThrottle?.throttle { [weak self] in
-            self?.offset = 0
-            self?.networkingService.searchItunesAPI(withQuery: query, entity: entity, offset: self?.offset ?? 0, limit: self?.limit ?? 20) { [weak self] results in
-                self?.searchResults = results
-                completion()
+            self?.networkingService.searchItunesAPI(withQuery: query, entity: entity, offset: 0, limit: self?.limit ?? 20) { [weak self] result in
+                switch result {
+                case .success(let results):
+                    self?.searchResults = results
+                case .failure(let error):
+                    switch error {
+                    case .invalidURL:
+                        self?.view?.showErrorMessage("Invalid URL.")
+                    case .noData:
+                        self?.view?.showErrorMessage("No data received.")
+                    case .decodingError:
+                        self?.view?.showErrorMessage("Decoding error occurred.")
+                    }
+                }
+                
                 self?.view?.stopAnimating()
                 self?.view?.reloadCollectionView()
+                completion()
             }
         }
     }
     
     func loadMoreResults(query: String, entity: String, at indexPath: IndexPath, completion: @escaping () -> Void) {
         let lastItem = numberOfResults() - 1
-        if indexPath.item == lastItem && offset < lastItem {
-            offset += limit
-            networkingService.searchItunesAPI(withQuery: query, entity: entity, offset: offset, limit: limit) { [weak self] results in
+        
+        guard indexPath.item == lastItem && lastItem >= 0 else {
+            return
+        }
+        
+        offset += limit
+        networkingService.searchItunesAPI(withQuery: query, entity: entity, offset: offset, limit: limit) { [weak self] result in
+            switch result {
+            case .success(let results):
                 self?.searchResults.append(contentsOf: results)
-                completion()
+            case .failure(let error):
+                print("Error occurred while loading more results: \(error)")
             }
+            completion()
         }
     }
-    
+
     func numberOfResults() -> Int {
         return searchResults.count
     }
