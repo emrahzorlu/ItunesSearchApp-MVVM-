@@ -14,6 +14,8 @@ protocol MainDisplayLayer: BaseControllerProtocol {
     func stopAnimating()
     func reloadCollectionView()
     func showErrorMessage(_ message: String)
+    func pushViewController(viewController: DetailViewController)
+    func setDataSource(dataSource: DataSource)
 }
 
 final class SearchViewController: BaseViewController, UISearchBarDelegate {
@@ -25,6 +27,7 @@ final class SearchViewController: BaseViewController, UISearchBarDelegate {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
+    
     
     var viewModel: MainBusinessLayer
 
@@ -50,8 +53,6 @@ final class SearchViewController: BaseViewController, UISearchBarDelegate {
         segmentedControl.selectedSegmentIndex = 0
         searchBar.placeholder = "Search..."
         searchBar.delegate = self
-        collectionView.dataSource = self
-        collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         segmentedControl.addTarget(self, action: #selector(segmentValueChanged(_:)), for: .valueChanged)
         view.addSubview(searchBar)
@@ -79,44 +80,6 @@ final class SearchViewController: BaseViewController, UISearchBarDelegate {
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-    }
-}
-
-extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.numberOfResults()
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? CustomCollectionViewCell else {
-            fatalError("Cell could not be dequeued")
-        }
-        if let result = viewModel.result(at: indexPath.item) {
-            cell.configure(with: result, delegate: self)
-        }
-        return cell
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width - 30) / 2
-        let height: CGFloat = 200
-        return CGSize(width: width, height: height)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        viewModel.loadMoreResults(query: searchBar.text ?? "", entity: entityForSelectedSegment(), at: indexPath) { [weak self] in
-            self?.viewModel.view?.stopAnimating()
-            self?.viewModel.view?.reloadCollectionView()
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let selectedResult = viewModel.result(at: indexPath.item) else {
-            return
-        }
-        let detailViewModel = DetailViewModel(searchResult: selectedResult)
-        let detailViewController = DetailViewController(viewModel: detailViewModel)
-        navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
 
@@ -149,9 +112,20 @@ extension SearchViewController: MainDisplayLayer {
 
 extension SearchViewController {
     
+    func pushViewController(viewController: DetailViewController) {
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     func showErrorMessage(_ message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+    
+    func setDataSource(dataSource: DataSource) {
+        dataSource.sections.forEach({ $0.registerCells(for: collectionView) })
+        collectionView.delegate = dataSource
+        collectionView.dataSource = dataSource
+        collectionView.reloadData()
     }
 }

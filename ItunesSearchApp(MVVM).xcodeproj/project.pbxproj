@@ -8,9 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		B10C6DE52BA28A970011F1C7 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10C6DE42BA28A970011F1C7 /* SearchViewModel.swift */; };
+		B12298CB2BF26994002C0FAF /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B12298CA2BF26994002C0FAF /* SnapKit */; };
+		B12298CD2BF26994002C0FAF /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = B12298CC2BF26994002C0FAF /* SnapKit-Dynamic */; };
+		B12298CE2BF26994002C0FAF /* SnapKit-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = B12298CC2BF26994002C0FAF /* SnapKit-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B12298D12BF27170002C0FAF /* CollectionSectionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12298D02BF27170002C0FAF /* CollectionSectionProtocol.swift */; };
+		B12298D32BF27198002C0FAF /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12298D22BF27198002C0FAF /* DataSource.swift */; };
+		B12298D52BF27224002C0FAF /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12298D42BF27224002C0FAF /* Section.swift */; };
 		B14947AE2BC77027000A7A40 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14947AD2BC77027000A7A40 /* UIImageExtension.swift */; };
-		B15B3D642B9A84DE002D708A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B15B3D632B9A84DE002D708A /* SnapKit */; };
-		B15B3D662B9A84DE002D708A /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = B15B3D652B9A84DE002D708A /* SnapKit-Dynamic */; };
 		B15B3D682B9AAF3C002D708A /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B3D672B9AAF3C002D708A /* CustomCollectionViewCell.swift */; };
 		B15B3D6A2B9AC803002D708A /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B3D692B9AC803002D708A /* SearchModel.swift */; };
 		B15B3D6C2B9AC837002D708A /* FetchItunesApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15B3D6B2B9AC837002D708A /* FetchItunesApi.swift */; };
@@ -28,8 +32,25 @@
 		B1BF1DF02BA3E2CE002C0532 /* Throttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1BF1DEF2BA3E2CE002C0532 /* Throttle.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		B12298CF2BF26994002C0FAF /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B12298CE2BF26994002C0FAF /* SnapKit-Dynamic in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		B10C6DE42BA28A970011F1C7 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		B12298D02BF27170002C0FAF /* CollectionSectionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSectionProtocol.swift; sourceTree = "<group>"; };
+		B12298D22BF27198002C0FAF /* DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
+		B12298D42BF27224002C0FAF /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		B14947AD2BC77027000A7A40 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		B15B3D672B9AAF3C002D708A /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		B15B3D692B9AC803002D708A /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
@@ -55,14 +76,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B15B3D642B9A84DE002D708A /* SnapKit in Frameworks */,
-				B15B3D662B9A84DE002D708A /* SnapKit-Dynamic in Frameworks */,
+				B12298CB2BF26994002C0FAF /* SnapKit in Frameworks */,
+				B12298CD2BF26994002C0FAF /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B12298C92BF2697F002C0FAF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B12298D62BF27840002C0FAF /* CollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				B12298D02BF27170002C0FAF /* CollectionSectionProtocol.swift */,
+				B12298D22BF27198002C0FAF /* DataSource.swift */,
+				B12298D42BF27224002C0FAF /* Section.swift */,
+			);
+			path = CollectionView;
+			sourceTree = "<group>";
+		};
 		B16A7B772BBC3E5300D5EA4A /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +159,7 @@
 			children = (
 				B176491E2B9A7F2700D01241 /* ItunesSearchApp(MVVM) */,
 				B176491D2B9A7F2700D01241 /* Products */,
+				B12298C92BF2697F002C0FAF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -135,6 +174,7 @@
 		B176491E2B9A7F2700D01241 /* ItunesSearchApp(MVVM) */ = {
 			isa = PBXGroup;
 			children = (
+				B12298D62BF27840002C0FAF /* CollectionView */,
 				B16A7B772BBC3E5300D5EA4A /* Protocol */,
 				B18F25D52BBF7B0800C824EE /* Base */,
 				B16A7B822BBCFCE500D5EA4A /* Model */,
@@ -178,6 +218,7 @@
 				B17649182B9A7F2700D01241 /* Sources */,
 				B17649192B9A7F2700D01241 /* Frameworks */,
 				B176491A2B9A7F2700D01241 /* Resources */,
+				B12298CF2BF26994002C0FAF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -185,8 +226,8 @@
 			);
 			name = "ItunesSearchApp(MVVM)";
 			packageProductDependencies = (
-				B15B3D632B9A84DE002D708A /* SnapKit */,
-				B15B3D652B9A84DE002D708A /* SnapKit-Dynamic */,
+				B12298CA2BF26994002C0FAF /* SnapKit */,
+				B12298CC2BF26994002C0FAF /* SnapKit-Dynamic */,
 			);
 			productName = "ItunesSearchApp(MVVM)";
 			productReference = B176491C2B9A7F2700D01241 /* ItunesSearchApp(MVVM).app */;
@@ -246,6 +287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1B97E6C2BBF96BB0004371E /* DetailViewController.swift in Sources */,
+				B12298D32BF27198002C0FAF /* DataSource.swift in Sources */,
 				B18F25DB2BBF7C1700C824EE /* LoadingStatusProtocol.swift in Sources */,
 				B17649342B9A820F00D01241 /* SearchViewController.swift in Sources */,
 				B10C6DE52BA28A970011F1C7 /* SearchViewModel.swift in Sources */,
@@ -253,11 +295,13 @@
 				B15B3D6C2B9AC837002D708A /* FetchItunesApi.swift in Sources */,
 				B17649222B9A7F2700D01241 /* SceneDelegate.swift in Sources */,
 				B18F25D72BBF7B2800C824EE /* BaseViewController.swift in Sources */,
+				B12298D52BF27224002C0FAF /* Section.swift in Sources */,
 				B14947AE2BC77027000A7A40 /* UIImageExtension.swift in Sources */,
 				B16A7B762BBC3E2400D5EA4A /* BaseControllerProtocol.swift in Sources */,
 				B1B97E6E2BBF96EC0004371E /* DetailViewModel.swift in Sources */,
 				B15B3D6A2B9AC803002D708A /* SearchModel.swift in Sources */,
 				B15B3D682B9AAF3C002D708A /* CustomCollectionViewCell.swift in Sources */,
+				B12298D12BF27170002C0FAF /* CollectionSectionProtocol.swift in Sources */,
 				B1BF1DF02BA3E2CE002C0532 /* Throttle.swift in Sources */,
 				B18F25D92BBF7B7A00C824EE /* BaseViewControllerProtocol.swift in Sources */,
 			);
@@ -485,12 +529,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B15B3D632B9A84DE002D708A /* SnapKit */ = {
+		B12298CA2BF26994002C0FAF /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B15B3D622B9A84DE002D708A /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
-		B15B3D652B9A84DE002D708A /* SnapKit-Dynamic */ = {
+		B12298CC2BF26994002C0FAF /* SnapKit-Dynamic */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B15B3D622B9A84DE002D708A /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = "SnapKit-Dynamic";

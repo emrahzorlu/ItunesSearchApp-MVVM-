@@ -26,9 +26,11 @@ final class SearchViewModel: MainBusinessLayer {
     private var offset = 0
     private var limit = 20
     private var searchThrottle: Throttle?
+    private var dataSource: DataSource
     
-    init(networkingService: NetworkingService = NetworkingApi()) {
+    init(networkingService: NetworkingService = NetworkingApi(), dataSource: DataSource = DataSource()) {
         self.networkingService = networkingService
+        self.dataSource = dataSource
     }
     
     func viewDidLoad() {
@@ -53,6 +55,7 @@ final class SearchViewModel: MainBusinessLayer {
                 switch result {
                 case .success(let results):
                     self?.searchResults = results
+                    self?.createSection(model: results, query: query, entity: entity)
                 case .failure(let error):
                     switch error {
                     case .invalidURL:
@@ -71,24 +74,24 @@ final class SearchViewModel: MainBusinessLayer {
         }
     }
     
+    
     func loadMoreResults(query: String, entity: String, at indexPath: IndexPath, completion: @escaping () -> Void) {
-        let lastItem = numberOfResults() - 1
-        
-        guard indexPath.item == lastItem && lastItem >= 0 else {
-            return
-        }
-        
+
         offset += limit
         networkingService.searchItunesAPI(withQuery: query, entity: entity, offset: offset, limit: limit) { [weak self] result in
             switch result {
             case .success(let results):
                 self?.searchResults.append(contentsOf: results)
+                self?.appendNewResults(results)
+                self?.view?.reloadCollectionView()
             case .failure(let error):
                 print("Error occurred while loading more results: \(error)")
             }
             completion()
         }
+        view?.stopAnimating()
     }
+
 
     func numberOfResults() -> Int {
         return searchResults.count
@@ -100,8 +103,44 @@ final class SearchViewModel: MainBusinessLayer {
         }
         return searchResults[index]
     }
-    
+
     func clearResults() {
-        searchResults = []
+        dataSource.sections = []
     }
 }
+
+private extension SearchViewModel {
+
+    func createSection(model: [SearchResult], query: String, entity: String) {
+        let loadMoreClosure: (() -> Void) = { [weak self] in
+            guard let self = self else { return }
+            let indexPath = IndexPath(item: self.numberOfResults() - 1, section: 0)
+            self.loadMoreResults(query: query, entity: entity, at: indexPath) { }
+        }
+        
+        let section = SearchListSection(cellModels: model, didSelectHandler: { [weak self] item in
+            guard let self = self else { return }
+            self.didSelectedItem(model: item)
+        }, loadmoreDataHandler: loadMoreClosure)
+        
+        dataSource.sections = [section]
+        view?.setDataSource(dataSource: dataSource)
+    }
+    
+    func appendNewResults(_ newResults: [SearchResult]) {
+        guard var section = dataSource.sections.first as? SearchListSection else { return }
+        section.appendCellModels(newElements: newResults)
+        dataSource.sections = [section]
+        view?.reloadCollectionView()
+    }
+    
+    func didSelectedItem(model: SearchResult) {
+        let detailViewModel = DetailViewModel(searchResult: model)
+        let detailViewController = DetailViewController(viewModel: detailViewModel)
+        view?.pushViewController(viewController: detailViewController)
+    }
+}
+
+
+
+

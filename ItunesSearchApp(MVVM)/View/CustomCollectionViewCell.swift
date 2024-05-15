@@ -49,7 +49,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func configure(with result: SearchResult, delegate: SearchViewController) {
+    func configure(with result: SearchResult) {
         titleLabel.text = result.trackName
         imageView.image = nil
         activityIndicator.startAnimating()
@@ -58,19 +58,11 @@ class CustomCollectionViewCell: UICollectionViewCell {
             switch result {
             case .success:
                 self?.activityIndicator.stopAnimating()
-            case .failure(let error):
+            case .failure:
                 self?.activityIndicator.stopAnimating()
-                let errorMessage: String
-                switch error {
-                case .invalidURL:
-                    errorMessage = "Invalid URL."
-                case .failedToLoadData:
-                    errorMessage = "Failed to load data."
-                }
-                let alertController = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                delegate.present(alertController, animated: true, completion: nil)
+                print("Error occurred while loading image")
             }
         }
     }
+
 }
