@@ -13,8 +13,8 @@ protocol MainBusinessLayer: BaseViewModelProtocol {
     var view: MainDisplayLayer? { get set }
     func numberOfResults() -> Int
     func result(at index: Int) -> SearchResult?
-    func search(query: String, entity: String, completion: @escaping () -> Void)
-    func loadMoreResults(query: String, entity: String, at indexPath: IndexPath, completion: @escaping () -> Void)
+    func search(query: String, mediaType: String, completion: @escaping () -> Void)
+    func loadMoreResults(query: String, mediaType: String, at indexPath: IndexPath, completion: @escaping () -> Void)
     func clearResults()
     }
 
@@ -37,7 +37,7 @@ final class SearchViewModel: MainBusinessLayer {
         view?.configure()
     }
     
-    func search(query: String, entity: String, completion: @escaping () -> Void) {
+    func search(query: String, mediaType: String, completion: @escaping () -> Void) {
         view?.reloadCollectionView()
         view?.startAnimating()
         
@@ -51,11 +51,11 @@ final class SearchViewModel: MainBusinessLayer {
         searchThrottle?.cancel()
         searchThrottle = Throttle(minimumDelay: 0.5)
         searchThrottle?.throttle { [weak self] in
-            self?.networkingService.searchItunesAPI(withQuery: query, entity: entity, offset: 0, limit: self?.limit ?? 20) { [weak self] result in
+            self?.networkingService.searchItunesAPI(withQuery: query, mediaType: mediaType, offset: 0, limit: self?.limit ?? 20) { [weak self] result in
                 switch result {
                 case .success(let results):
                     self?.searchResults = results
-                    self?.createSection(model: results, query: query, entity: entity)
+                    self?.createSection(model: results, query: query, mediaType: mediaType)
                 case .failure(let error):
                     switch error {
                     case .invalidURL:
@@ -64,6 +64,8 @@ final class SearchViewModel: MainBusinessLayer {
                         self?.view?.showErrorMessage("No data received.")
                     case .decodingError:
                         self?.view?.showErrorMessage("Decoding error occurred.")
+                    case .fake:
+                        self?.view?.showErrorMessage("Fake error.")
                     }
                 }
                 
@@ -75,10 +77,10 @@ final class SearchViewModel: MainBusinessLayer {
     }
     
     
-    func loadMoreResults(query: String, entity: String, at indexPath: IndexPath, completion: @escaping () -> Void) {
+    func loadMoreResults(query: String, mediaType: String, at indexPath: IndexPath, completion: @escaping () -> Void) {
 
         offset += limit
-        networkingService.searchItunesAPI(withQuery: query, entity: entity, offset: offset, limit: limit) { [weak self] result in
+        networkingService.searchItunesAPI(withQuery: query, mediaType: mediaType, offset: offset, limit: limit) { [weak self] result in
             switch result {
             case .success(let results):
                 self?.searchResults.append(contentsOf: results)
@@ -111,11 +113,11 @@ final class SearchViewModel: MainBusinessLayer {
 
 private extension SearchViewModel {
 
-    func createSection(model: [SearchResult], query: String, entity: String) {
+    func createSection(model: [SearchResult], query: String, mediaType: String) {
         let loadMoreClosure: (() -> Void) = { [weak self] in
             guard let self = self else { return }
             let indexPath = IndexPath(item: self.numberOfResults() - 1, section: 0)
-            self.loadMoreResults(query: query, entity: entity, at: indexPath) { }
+            self.loadMoreResults(query: query, mediaType: mediaType, at: indexPath) { }
         }
         
         let section = SearchListSection(cellModels: model, didSelectHandler: { [weak self] item in

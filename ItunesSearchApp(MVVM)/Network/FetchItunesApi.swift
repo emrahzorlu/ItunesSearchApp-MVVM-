@@ -11,18 +11,19 @@ enum NetworkError: Error {
     case invalidURL
     case noData
     case decodingError
+    case fake
 }
 
 protocol NetworkingService {
-    func searchItunesAPI(withQuery query: String, entity: String, offset: Int, limit: Int, completion: @escaping (Result<[SearchResult], NetworkError>) -> ())
+    func searchItunesAPI(withQuery query: String, mediaType: String, offset: Int, limit: Int, completion: @escaping (Result<[SearchResult], NetworkError>) -> ())
 }
 
 final class NetworkingApi: NetworkingService {
     private let session = URLSession.shared
     
-    func searchItunesAPI(withQuery query: String, entity: String, offset: Int, limit: Int, completion: @escaping (Result<[SearchResult], NetworkError>) -> ()) {
+    func searchItunesAPI(withQuery query: String, mediaType: String, offset: Int, limit: Int, completion: @escaping (Result<[SearchResult], NetworkError>) -> ()) {
         let editedQuery = query.replacingOccurrences(of: " ", with: "+")
-        let urlString = "https://itunes.apple.com/search?term=\(editedQuery)&media=\(entity)&sort=popularity&offset=\(offset)&limit=\(limit)"
+        let urlString = "https://itunes.apple.com/search?term=\(editedQuery)&media=\(mediaType)&sort=popularity&offset=\(offset)&limit=\(limit)"
         print(urlString)
         guard let url = URL(string: urlString) else {
             completion(.failure(.invalidURL))

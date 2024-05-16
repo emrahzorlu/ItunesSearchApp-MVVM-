@@ -91,12 +91,12 @@ extension SearchViewController: MainDisplayLayer {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.clearResults()
-        viewModel.search(query: searchBar.text ?? "", entity: entityForSelectedSegment()) {}
+        viewModel.search(query: searchBar.text ?? "", mediaType: entityForSelectedSegment()) {}
     }
 
     @objc func segmentValueChanged(_ sender: UISegmentedControl) {
         viewModel.clearResults()
-        viewModel.search(query: searchBar.text ?? "", entity: entityForSelectedSegment()) {}
+        viewModel.search(query: searchBar.text ?? "", mediaType: entityForSelectedSegment()) {}
     }
 
     func entityForSelectedSegment() -> String {

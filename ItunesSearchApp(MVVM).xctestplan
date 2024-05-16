@@ -1,0 +1,28 @@
+{
+  "configurations" : [
+    {
+      "id" : "2FF37858-93EE-495D-A967-FFF905D76500",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:ItunesSearchApp(MVVM).xcodeproj",
+      "identifier" : "B176491B2B9A7F2700D01241",
+      "name" : "ItunesSearchApp(MVVM)"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ItunesSearchApp(MVVM).xcodeproj",
+        "identifier" : "B1C246622BF573F700E483BE",
+        "name" : "ItunesSearchApp(MVVM)Tests"
+      }
+    }
+  ],
+  "version" : 1
+}
