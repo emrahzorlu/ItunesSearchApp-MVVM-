@@ -34,121 +34,177 @@ class DetailViewController: UIViewController {
     
     private let trackNameLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.numberOfLines = 0
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.numberOfLines = 2
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        return label
+    }()
+
+    
+    private let trackDurationLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .gray
         return label
     }()
     
     private let artistNameLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 20)
         label.numberOfLines = 0
+        label.textColor = .gray
         return label
     }()
     
-    private let collectionNameLabel: UILabel = {
+    private let genreLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 16)
-        label.numberOfLines = 0
+        label.textColor = .gray
         return label
     }()
     
     private let releaseDateLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.numberOfLines = 0
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .gray
         return label
     }()
     
-    private let trackPriceLabel: UILabel = {
+    private let colletionPriceLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.red
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.numberOfLines = 0
+        label.textColor = .systemBlue
+        label.textAlignment = .right
+        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         return label
     }()
     
-    private let collectionPriceLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.blue
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.numberOfLines = 0
-        return label
+    private let buyButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("₺0,99", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 15
+        button.clipsToBounds = true
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configure(with: viewModel)
+        updateColorsForDarkMode()
     }
-    
-    func configureUI(){
-        view.backgroundColor = .white
+
+    func configureUI() {
+        view.backgroundColor = .systemBackground
+        
         view.addSubview(artWorkImageView)
         view.addSubview(trackNameLabel)
+        view.addSubview(trackDurationLabel)
         view.addSubview(artistNameLabel)
-        view.addSubview(collectionNameLabel)
+        view.addSubview(genreLabel)
         view.addSubview(releaseDateLabel)
-        view.addSubview(collectionPriceLabel)
-        view.addSubview(trackPriceLabel)
-                
-        artWorkImageView.layer.shadowColor = UIColor.black.cgColor
-        artWorkImageView.layer.shadowOpacity = 1.0
-        artWorkImageView.layer.shadowOffset = CGSize(width: 0, height: 8)
-        artWorkImageView.layer.shadowRadius = 12
+        view.addSubview(buyButton)
+        view.addSubview(colletionPriceLabel)
         
         artWorkImageView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(90)
-            make.width.equalToSuperview().multipliedBy(0.8)
-            make.height.equalTo(artWorkImageView.snp.width).multipliedBy(0.8)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
+            make.leading.trailing.equalToSuperview().inset(40)
+            make.height.equalTo(artWorkImageView.snp.width)
         }
         
         trackNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(artWorkImageView.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(artWorkImageView.snp.bottom).offset(40)
+            make.leading.equalToSuperview().inset(20)
+        }
+        
+        trackDurationLabel.snp.makeConstraints { make in
+            make.leading.equalTo(trackNameLabel.snp.trailing).offset(8)
+            make.bottom.equalTo(trackNameLabel)
+            make.trailing.lessThanOrEqualToSuperview().inset(20)
         }
         
         artistNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(trackNameLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(trackNameLabel.snp.bottom).offset(8)
+            make.leading.equalTo(trackNameLabel)
+            make.trailing.equalToSuperview().inset(20)
         }
         
-        collectionNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(artistNameLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(20)
+        genreLabel.snp.makeConstraints { make in
+            make.top.equalTo(artistNameLabel.snp.bottom).offset(8)
+            make.leading.equalTo(trackNameLabel)
+            make.trailing.equalToSuperview().inset(20)
         }
         
         releaseDateLabel.snp.makeConstraints { make in
-            make.top.equalTo(collectionNameLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(genreLabel.snp.bottom).offset(8)
+            make.leading.equalTo(trackNameLabel)
+            make.trailing.equalToSuperview().inset(20)
         }
         
-        trackPriceLabel.snp.makeConstraints { make in
-            make.top.equalTo(releaseDateLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+        buyButton.snp.makeConstraints { make in
+            make.top.equalTo(releaseDateLabel.snp.bottom).offset(20)
+            make.trailing.equalToSuperview().inset(20)
+            make.width.equalTo(100)
+            make.height.equalTo(40)
         }
         
-        collectionPriceLabel.snp.makeConstraints { make in
-            make.top.equalTo(trackPriceLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(20)
+        colletionPriceLabel.snp.makeConstraints { make in
+            make.top.equalTo(buyButton.snp.bottom).offset(20)
+            make.leading.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(20)
         }
     }
+
+
 
     func configure(with viewModel: DetailBusinessLayer) {
         trackNameLabel.text = viewModel.getTrackName()
         artistNameLabel.text = viewModel.getArtistName()
-        collectionNameLabel.text = viewModel.getCollectionName()
+        genreLabel.text = viewModel.getPrimaryGenreName()
         releaseDateLabel.text = viewModel.getReleaseDate()
-        trackPriceLabel.text = viewModel.getTrackPrice()
-        collectionPriceLabel.text = viewModel.getCollectionPrice()
+        colletionPriceLabel.text = viewModel.getCollectionPrice()
+        trackDurationLabel.text = viewModel.getTrackDuration()
+        buyButton.setTitle(viewModel.getTrackPrice(), for: .normal)
         artWorkImageView.setImage(from: viewModel.getUrl())
+    }
+}
+
+extension DetailViewController {
+    func updateColorsForDarkMode() {
+        if traitCollection.userInterfaceStyle == .dark {
+
+            view.backgroundColor = .black
+            trackNameLabel.textColor = .white
+            trackDurationLabel.textColor = .lightGray
+            artistNameLabel.textColor = .lightGray
+            genreLabel.textColor = .lightGray
+            releaseDateLabel.textColor = .lightGray
+            colletionPriceLabel.textColor = .systemBlue
+            buyButton.backgroundColor = .systemBlue
+        } else {
+
+            view.backgroundColor = .systemBackground
+            trackNameLabel.textColor = .black
+            trackDurationLabel.textColor = .gray
+            artistNameLabel.textColor = .gray
+            genreLabel.textColor = .gray
+            releaseDateLabel.textColor = .gray
+            colletionPriceLabel.textColor = .systemBlue
+            buyButton.backgroundColor = .systemBlue
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        updateColorsForDarkMode()
     }
 }

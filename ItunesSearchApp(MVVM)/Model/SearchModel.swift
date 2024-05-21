@@ -15,4 +15,6 @@ struct SearchResult: Decodable {
     let artistName: String?
     let trackName: String?
     let trackPrice: Double?
+    let primaryGenreName: String?
+    let trackTimeMillis: Int? 
 }

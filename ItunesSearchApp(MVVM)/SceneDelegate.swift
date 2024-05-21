@@ -18,12 +18,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let viewModel = SearchViewModel()
         let searchViewController = SearchViewController(viewModel: viewModel)
+        
         let navigationController = UINavigationController(rootViewController: searchViewController)
         navigationController.navigationBar.topItem?.title = "Itunes Search App"
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = navigationController
+        
         self.window = window
         window.makeKeyAndVisible()
     }
 }
-

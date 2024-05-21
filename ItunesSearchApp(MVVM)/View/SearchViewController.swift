@@ -46,6 +46,7 @@ final class SearchViewController: BaseViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.viewDidLoad()
+        updateColorsForDarkMode()
     }
 
     func configure() {
@@ -127,5 +128,26 @@ extension SearchViewController {
         collectionView.delegate = dataSource
         collectionView.dataSource = dataSource
         collectionView.reloadData()
+    }
+}
+
+extension SearchViewController {
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        updateColorsForDarkMode()
+    }
+
+    private func updateColorsForDarkMode() {
+        if traitCollection.userInterfaceStyle == .dark {
+            view.backgroundColor = .black
+            searchBar.barStyle = .black
+            segmentedControl.tintColor = .white
+            collectionView.backgroundColor = .black
+        } else {
+            view.backgroundColor = .white
+            searchBar.barStyle = .default
+            segmentedControl.tintColor = .systemBlue
+            collectionView.backgroundColor = .white
+        }
     }
 }

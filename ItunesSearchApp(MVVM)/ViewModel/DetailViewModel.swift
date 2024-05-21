@@ -22,6 +22,8 @@ protocol DetailBusinessLayer: BaseViewModelProtocol {
     func getCollectionPrice() -> String
     func getTrackPrice() -> String
     func getUrl() -> String
+    func getPrimaryGenreName() -> String
+    func getTrackDuration() -> String
 }
 
 final class DetailViewModel: DetailBusinessLayer {
@@ -63,9 +65,9 @@ final class DetailViewModel: DetailBusinessLayer {
     
     func getCollectionPrice() -> String {
         if let price = searchResult?.collectionPrice {
-            return "\(price)$"
+            return "All Collection: \(price)$"
         } else {
-            return "Free"
+            return "All Collection: Free"
         }
     }
     
@@ -79,5 +81,26 @@ final class DetailViewModel: DetailBusinessLayer {
     
     func getUrl() -> String {
         return searchResult?.artworkUrl100 ?? ""
+    }
+    
+    func getPrimaryGenreName() -> String {
+        return searchResult?.primaryGenreName ?? ""
+    }
+    
+    func formattedTime(milliseconds: Int) -> String {
+        let totalSeconds = Int(milliseconds) / 1000
+        let seconds = totalSeconds % 60
+        let minutes = (totalSeconds / 60) % 60
+        let hours = totalSeconds / 3600
+        
+        if hours > 0 {
+            return String(format: "%d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            return String(format: "%d:%02d", minutes, seconds)
+        }
+    }
+
+    func getTrackDuration() -> String {
+        return formattedTime(milliseconds: searchResult?.trackTimeMillis ?? 0)
     }
 }

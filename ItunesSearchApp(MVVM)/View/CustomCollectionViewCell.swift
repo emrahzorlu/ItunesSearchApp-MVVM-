@@ -64,5 +64,21 @@ class CustomCollectionViewCell: UICollectionViewCell {
             }
         }
     }
+}
 
+extension CustomCollectionViewCell {
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        updateColorsForDarkMode()
+    }
+
+    private func updateColorsForDarkMode() {
+        if traitCollection.userInterfaceStyle == .dark {
+            contentView.backgroundColor = .black
+            titleLabel.textColor = .white
+        } else {
+            contentView.backgroundColor = .white
+            titleLabel.textColor = .black
+        }
+    }
 }
